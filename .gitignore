@@ -1,0 +1,14 @@
+#
+# Git Ignore
+#
+
+# Idea
+.idea
+
+# project
+**/.iml
+*.iml
+
+# Java
+**/target
+**/test
