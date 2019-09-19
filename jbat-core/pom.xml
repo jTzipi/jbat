@@ -13,6 +13,19 @@
 
     <artifactId>jbat-core</artifactId>
     <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+    <dependency>
+        <groupId>org.controlsfx</groupId>
+        <artifactId>controlsfx</artifactId>
+        <version>8.40.14</version>
+    </dependency>
+    <!-- Fontawesome fx -->
+    <dependency>
+        <groupId>de.jensd</groupId>
+        <artifactId>fontawesomefx</artifactId>
+        <version>8.9</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
     <dependency>
         <groupId>org.slf4j</groupId>
@@ -27,6 +40,13 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
     </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>earth.eu.jtzipi</groupId>
+            <artifactId>jbat-node</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
+
+    </dependencies>
 </project>
