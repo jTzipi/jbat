@@ -2,7 +2,6 @@ package earth.eu.jtzipi.jbat;
 
 import earth.eu.jtzipi.jbat.ui.MainPane;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -13,8 +12,7 @@ import javafx.stage.Stage;
  */
 public class JBat extends Application {
 
-    public static final double WIDTH_DEF = 1200D;
-    public static final double HEIGHT_DEF = 770D;
+
 
     /**
      * JML start.
@@ -30,7 +28,7 @@ public class JBat extends Application {
      */
     public void start( Stage primaryStage ) throws Exception {
 
-                Scene scene = new Scene( MainPane.getInstance(), WIDTH_DEF, HEIGHT_DEF );
+                Scene scene = new Scene( MainPane.getInstance(), JBatGlobal.WIDTH_DEF, JBatGlobal.HEIGHT_DEF );
 
         primaryStage.setTitle("Java Batch Tool");
         primaryStage.setScene(scene);

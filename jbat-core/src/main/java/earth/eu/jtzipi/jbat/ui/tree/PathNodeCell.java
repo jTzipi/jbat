@@ -1,6 +1,6 @@
 package earth.eu.jtzipi.jbat.ui.tree;
 
-import earth.eu.jtzipi.jbat.node.path.IPathNode;
+import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.scene.control.TreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

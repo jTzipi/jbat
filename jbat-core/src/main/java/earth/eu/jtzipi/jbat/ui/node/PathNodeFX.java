@@ -1,11 +1,13 @@
 package earth.eu.jtzipi.jbat.ui.node;
 
-import earth.eu.jtzipi.jbat.node.path.IOUtils;
-import earth.eu.jtzipi.jbat.node.path.IPathNode;
+import earth.eu.jtzipi.modules.io.IOUtils;
+import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PathNodeFX {
 
@@ -52,5 +54,12 @@ public class PathNodeFX {
         this.fxLengthProp.setValue( IOUtils.formatFileSize( pn.getFileLength(), true ) );
     }
 
-
+    /**
+     * Create list of pathnodefx.
+     * @param node path node
+     * @return
+     */
+    public static List<PathNodeFX> createPathNodeFXList( IPathNode  node ) {
+        return node.getSubnodes().stream().map( pnode -> PathNodeFX.of( pnode ) ).collect( Collectors.toList());
+    }
 }

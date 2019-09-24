@@ -1,11 +1,10 @@
 package earth.eu.jtzipi.jbat.ui.tree;
 
-import earth.eu.jtzipi.jbat.node.path.IPathNode;
+import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 

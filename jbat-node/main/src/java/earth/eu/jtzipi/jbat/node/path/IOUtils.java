@@ -1,5 +1,8 @@
 package earth.eu.jtzipi.jbat.node.path;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -18,7 +21,7 @@ public final class IOUtils {
     static final DirectoryStream.Filter<Path> ACCEPT = path -> true;
     static final Predicate<Path> PATH_ACCEPT_ALL = path -> true;
     static final Predicate<Path> PATH_ACCEPT_DIR = path -> Files.isReadable( path ) && Files.isDirectory( path );
-
+    private static final Logger LOG = LoggerFactory.getLogger( "IOUtils" );
     public static String readableFileSize(long size) {
         if(size <= 0) return "0";
         final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
@@ -43,6 +46,9 @@ public final class IOUtils {
         String unitSymbol = si ? "kMGT" : "KMGT";
 
         int exp = (int) (Math.log(bytes) / Math.log(unit));
+
+        LOG.warn( "formatiere " + bytes + " " + exp );
+
         String pre = unitSymbol.charAt(exp - 1) +  ( si ? "" : "i" );
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
