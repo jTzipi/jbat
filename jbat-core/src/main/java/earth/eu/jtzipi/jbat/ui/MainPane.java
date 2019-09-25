@@ -59,13 +59,15 @@ public final class MainPane extends Pane {
         dirTreeV.prefHeightProperty().bind( prefHeightProperty() );
 
         pp = new PathPane( root );
-        pp.prefWidthProperty().bind( prefWidthProperty().multiply( 0.75 ) );
+
 
         bpp = new BatchPathPane(  );
-        bpp.prefWidthProperty().bind( JBatGlobal.FX_PREF_WIDTH_MAIN_75 );
+
         mainSplit = new SplitPane( pp, bpp );
         mainSplit.setOrientation( Orientation.VERTICAL );
         mainSplit.setPrefHeight( JBatGlobal.HEIGHT_DEF );
+
+
         bp.setLeft( dirTreeV );
         bp.setCenter( mainSplit );
 
