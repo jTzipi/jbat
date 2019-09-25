@@ -24,7 +24,6 @@ public class PathNodeFX {
         PATH_LEVEL_UP.fxNameProp.setValue( "[..]" );
     }
 
-    private IPathNode pn;
 
     private StringProperty fxNameProp = new SimpleStringProperty(this, "FX_PATH_NAME_PROP", IPathNode.PATH_NOT_READABLE);
     private StringProperty fxTypeProp = new SimpleStringProperty(this, "FX_PATH_TYPE_PROP", "" );
