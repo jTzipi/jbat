@@ -10,20 +10,31 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.nio.file.Paths;
 
+/**
+ * Global Properties.
+ * @author jtzipi
+ */
 public final class JBatGlobal {
-
+    /**
+     * Default width.
+     */
     public static final double WIDTH_DEF = 1200D;
+    /**
+     * Default height.
+     */
     public static final double HEIGHT_DEF = 770D;
     /**
      * Directory currently viewed.
      */
     public static final ObjectProperty<IPathNode> FX_CURRENT_DIR_PATH = new SimpleObjectProperty<>();
 
+    public static final ObjectProperty<IPathNode> FX_PATH_PROP = new SimpleObjectProperty<>();
     public static final DoubleProperty FX_WIDTH_PROP = new SimpleDoubleProperty(WIDTH_DEF);
+
     public static final DoubleProperty FX_HEIGHT_PROP = new SimpleDoubleProperty(HEIGHT_DEF);
 
-
     public static final  DoubleBinding FX_PREF_WIDTH_MAIN_75 = FX_HEIGHT_PROP.multiply( 0.78D );
+
     static {
 
         FX_CURRENT_DIR_PATH.setValue( PathNode.of( Paths.get("C:/"), null) );

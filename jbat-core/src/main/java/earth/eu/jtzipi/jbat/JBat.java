@@ -28,7 +28,8 @@ public class JBat extends Application {
      */
     public void start( Stage primaryStage ) throws Exception {
 
-                Scene scene = new Scene( MainPane.getInstance(), JBatGlobal.WIDTH_DEF, JBatGlobal.HEIGHT_DEF );
+        Scene scene = new Scene( MainPane.getInstance(), JBatGlobal.WIDTH_DEF, JBatGlobal.HEIGHT_DEF );
+
 
         primaryStage.setTitle("Java Batch Tool");
         primaryStage.setScene(scene);

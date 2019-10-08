@@ -1,8 +1,11 @@
 package earth.eu.jtzipi.jbat.ui.node;
 
 import earth.eu.jtzipi.modules.node.path.IPathNode;
+import earth.eu.jtzipi.modules.node.path.PathNode;
 import javafx.beans.property.*;
 
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,9 +22,11 @@ public class PathNodeFX {
 
     static  {
         PATH_LEVEL_UP.fxLengthProp.setValue( -2L );
+        PATH_LEVEL_UP.fxPathNodeProp.setValue( PathNode.of( Paths.get("../"), null ) );
         PATH_LEVEL_UP.fxExtProp.setValue( "" );
         PATH_LEVEL_UP.fxTypeProp.setValue( "" );
         PATH_LEVEL_UP.fxNameProp.setValue( "[..]" );
+        PATH_LEVEL_UP.fxCreatedFileTimeProp.setValue( FileTime.fromMillis( 0L ) );
     }
 
 
@@ -29,6 +34,9 @@ public class PathNodeFX {
     private StringProperty fxTypeProp = new SimpleStringProperty(this, "FX_PATH_TYPE_PROP", "" );
     private StringProperty fxExtProp =  new SimpleStringProperty( this, "FX_PATH_EXT_PROP", "" );
     private LongProperty fxLengthProp = new SimpleLongProperty();
+    private ObjectProperty<FileTime> fxLastAccFileTimeProp = new SimpleObjectProperty<>();
+    private ObjectProperty<FileTime> fxLastModFileTimeProp =  new SimpleObjectProperty<>();
+    private ObjectProperty<FileTime> fxCreatedFileTimeProp = new SimpleObjectProperty<>();
     private ReadOnlyObjectWrapper<IPathNode> fxPathNodeProp = new ReadOnlyObjectWrapper<>( this, "FX_PATH_NODE_PROP", null );
 
     PathNodeFX(  ) {
@@ -61,13 +69,23 @@ public class PathNodeFX {
         return list;
     }
 
+    /**
+     * Path name property.
+     * @return property of name
+     */
     public final StringProperty getNameProp() {
         return fxNameProp;
     }
 
+    /**
+     * Name of path.
+     * @return name of path
+     */
     public final String getName() {
         return getNameProp().getValue();
     }
+
+
 
        public final LongProperty getLengthProp() {
         return fxLengthProp;
@@ -93,6 +111,12 @@ public class PathNodeFX {
         return this.fxPathNodeProp.getReadOnlyProperty();
     }
 
+    public FileTime getCreated() {
+        return this.fxCreatedFileTimeProp.getValue();
+    }
+
+
+
     private void init( final IPathNode pn ) {
         this.fxNameProp.setValue( pn.getName() );
         boolean dir = pn.isDir();
@@ -101,6 +125,7 @@ public class PathNodeFX {
         this.fxExtProp.setValue( dir? "[DIR]" : "" );
         this.fxLengthProp.setValue( pn.getFileLength() );
         this.fxPathNodeProp.setValue( pn );
+        this.fxCreatedFileTimeProp.setValue( pn.getCreated().orElse( FileTime.fromMillis( 0L ) ) );
     }
 
 

@@ -5,11 +5,11 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class PathNodeCell extends TreeCell<IPathNode> {
+public class PathNodeTreeCell extends TreeCell<IPathNode> {
 
     private ImageView iv;
 
-    public PathNodeCell() {
+    public PathNodeTreeCell() {
 
     }
 

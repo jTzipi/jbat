@@ -1,8 +1,8 @@
 package earth.eu.jtzipi.jbat.ui;
 
 import earth.eu.jtzipi.jbat.JBatGlobal;
-import earth.eu.jtzipi.jbat.ui.tree.PathNodeCell;
 import earth.eu.jtzipi.jbat.ui.tree.PathNodeItem;
+import earth.eu.jtzipi.jbat.ui.tree.PathNodeTreeCell;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -27,7 +27,7 @@ public final class MainPane extends Pane {
     private TreeView<IPathNode> dirTreeV;
     private PathPane pp;
     private BatchPathPane bpp;
-
+    private PreviewPane prevp;
 
 
     private SplitPane mainSplit;
@@ -67,9 +67,11 @@ public final class MainPane extends Pane {
         mainSplit.setOrientation( Orientation.VERTICAL );
         mainSplit.setPrefHeight( JBatGlobal.HEIGHT_DEF );
 
+        prevp = new PreviewPane();
 
         bp.setLeft( dirTreeV );
         bp.setCenter( mainSplit );
+    bp.setRight( prevp );
 
         getChildren().add( 0, bp );
     }
@@ -81,7 +83,7 @@ public final class MainPane extends Pane {
             LOG.warn( "Node ist null" );
             return;
         }
-        LOG.info( "Create FX Pathnode " + nodeItem );
+        LOG.info( "Path Tree Item bei 'pathChanged' " + nodeItem );
         JBatGlobal.FX_CURRENT_DIR_PATH.setValue( nodeItem.getValue() );
     }
 
@@ -93,7 +95,7 @@ public final class MainPane extends Pane {
         TreeItem<IPathNode> rootItem = PathNodeItem.of( rootPath );
 
         TreeView<IPathNode> view = new TreeView<>(rootItem);
-        view.setCellFactory( (cb -> new PathNodeCell() ) );
+        view.setCellFactory( (cb -> new PathNodeTreeCell() ) );
 
 
             return view;
