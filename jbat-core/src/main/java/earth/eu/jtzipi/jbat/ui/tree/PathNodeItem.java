@@ -5,17 +5,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Path Tree Node Item.
+ *
+ * @author jTz
+ */
 public class PathNodeItem extends TreeItem<IPathNode> {
 private boolean created;
+
     PathNodeItem( final IPathNode pathNode ) {
         super(pathNode);
         this.created = false;
     }
 
-    public static TreeItem<IPathNode> of(  final IPathNode pn ) {
+    public static TreeItem<IPathNode> of( final IPathNode pn ) {
         Objects.requireNonNull(pn);
 
         return new PathNodeItem( pn );
@@ -35,7 +42,11 @@ private boolean created;
         }
 
         if( !created ) {
-            super.getChildren().setAll( pathNode.getSubnodes().stream().map( pn -> PathNodeItem.of( pn  ) ).collect( Collectors.toList() ) );
+            super.getChildren().setAll( pathNode.getSubnodes( Files::isDirectory )
+                    .stream()
+                    .map( pn -> PathNodeItem.of( pn ) )
+                    .collect( Collectors.toList() ) );
+
             created = true;
         }
 

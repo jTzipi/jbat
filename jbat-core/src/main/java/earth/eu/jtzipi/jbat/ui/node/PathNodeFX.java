@@ -1,7 +1,7 @@
 package earth.eu.jtzipi.jbat.ui.node;
 
 import earth.eu.jtzipi.modules.node.path.IPathNode;
-import earth.eu.jtzipi.modules.node.path.PathNode;
+import earth.eu.jtzipi.modules.node.path.RegularPathNode;
 import javafx.beans.property.*;
 
 import java.nio.file.Paths;
@@ -22,7 +22,7 @@ public class PathNodeFX {
 
     static  {
         PATH_LEVEL_UP.fxLengthProp.setValue( -2L );
-        PATH_LEVEL_UP.fxPathNodeProp.setValue( PathNode.of( Paths.get("../"), null ) );
+        PATH_LEVEL_UP.fxPathNodeProp.setValue( RegularPathNode.of( Paths.get( "../" ), null ) );
         PATH_LEVEL_UP.fxExtProp.setValue( "" );
         PATH_LEVEL_UP.fxTypeProp.setValue( "" );
         PATH_LEVEL_UP.fxNameProp.setValue( "[..]" );

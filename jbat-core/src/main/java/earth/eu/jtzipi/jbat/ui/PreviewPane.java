@@ -1,8 +1,8 @@
 package earth.eu.jtzipi.jbat.ui;
 
 import earth.eu.jtzipi.jbat.JBatGlobal;
-import earth.eu.jtzipi.jbat.image.GraphicsUtilities;
 import earth.eu.jtzipi.modules.io.IOUtils;
+import earth.eu.jtzipi.modules.io.image.GraphicsUtilities;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;

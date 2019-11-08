@@ -21,18 +21,35 @@ public class JBat extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    private static void onClose() {
+
+
+        JBatGlobal.SEARCH_EXE_SER.shutdownNow();
+        System.out.println( " <Close> " );
+    }
+
+    private static void loadResource() {
+
+    }
+
     /**
      *
-     * @param primaryStage
-     * @throws Exception
+     * @param primaryStage primary
+     * @throws Exception failed
      */
     public void start( Stage primaryStage ) throws Exception {
+        primaryStage.setOnCloseRequest( event -> onClose() );
+
 
         Scene scene = new Scene( MainPane.getInstance(), JBatGlobal.WIDTH_DEF, JBatGlobal.HEIGHT_DEF );
 
 
+        JBatGlobal.MAIN_STAGE = primaryStage;
         primaryStage.setTitle("Java Batch Tool");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 }

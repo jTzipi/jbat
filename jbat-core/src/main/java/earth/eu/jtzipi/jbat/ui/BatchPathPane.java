@@ -6,6 +6,8 @@ import earth.eu.jtzipi.modules.io.task.FindPathTask;
 import earth.eu.jtzipi.modules.io.task.PathCrawler;
 import earth.eu.jtzipi.modules.io.task.TaskIO;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -27,7 +29,7 @@ public class BatchPathPane extends BorderPane {
 
 
     private TreeTableView<IPathNode> ttv;  // tree table for found path
-
+    private ObservableList<IPathNode> foundImgOL = FXCollections.observableArrayList();
 
     BatchPathPane(  ) {
 
