@@ -1,9 +1,17 @@
 package earth.eu.jtzipi.jbat;
 
 import earth.eu.jtzipi.jbat.ui.MainPane;
+import earth.eu.jtzipi.modules.io.IOUtils;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -12,7 +20,7 @@ import javafx.stage.Stage;
  */
 public class JBat extends Application {
 
-
+    private static final Path resPath = IOUtils.getProgramDir().resolve( "jbat-core/src/main/resources" );
 
     /**
      * JML start.
@@ -40,6 +48,33 @@ public class JBat extends Application {
      */
     public void start( Stage primaryStage ) throws Exception {
         primaryStage.setOnCloseRequest( event -> onClose() );
+
+
+        CompletableFuture<Map<Path, Image>> imgC = CompletableFuture.supplyAsync( () -> {
+
+            try {
+
+                Path path = resPath.resolve( "img" );
+                Map<Path, Image> imgMap = new TreeMap<>();
+
+                for ( Path ip : IOUtils.lookupDir( path, IOUtils.PATH_ACCEPT_IMAGE ) ) {
+
+                    imgMap.put( ip, IOUtils.loadImage( ip ) );
+
+                }
+
+                return imgMap;
+            } catch ( IOException ioE ) {
+                throw new IllegalStateException();
+            }
+        } );
+
+        // imgC.whenComplete( ( map, t ) -> Resources.setImages(map)  );
+
+
+
+
+
 
 
         Scene scene = new Scene( MainPane.getInstance(), JBatGlobal.WIDTH_DEF, JBatGlobal.HEIGHT_DEF );

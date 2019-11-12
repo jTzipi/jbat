@@ -1,4 +1,4 @@
-package earth.eu.jtzipi.jbat.ui;
+package earth.eu.jtzipi.jbat.ui.list;
 
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.scene.control.ListCell;
