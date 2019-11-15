@@ -1,18 +1,25 @@
-package earth.eu.jtzipi.jbat.ui;
+package earth.eu.jtzipi.jbat.ui.table;
 
+import earth.eu.jtzipi.jbat.ui.Painter;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.SkinBase;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 
+
 public class TableHeaderCover extends SkinBase<TableHeader> {
+    /**
+     * Minimum width.
+     */
     public static final double WIDTH_MIN = 9D;
-
+    /**
+     * Maximum width.
+     */
     public static final double WIDTH_MAX = 9999D;
-
+    /** Minimum height. */
     public static final double HEIGHT_MIN = 9D;
-
+    /** Preferred height. */
     public static final double HEIGHT_PREF = 26D;
 
     GraphicsContext gc;

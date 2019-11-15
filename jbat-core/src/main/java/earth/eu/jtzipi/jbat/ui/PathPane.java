@@ -5,6 +5,7 @@ import earth.eu.jtzipi.jbat.ui.node.PathNodeFX;
 import earth.eu.jtzipi.jbat.ui.table.PathNodeLengthTableCell;
 import earth.eu.jtzipi.jbat.ui.table.PathNodeTableCell;
 import earth.eu.jtzipi.jbat.ui.table.PathNodeTimeTableCell;
+import earth.eu.jtzipi.jbat.ui.table.TableHeader;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

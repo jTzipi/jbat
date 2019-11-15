@@ -1,4 +1,4 @@
-package earth.eu.jtzipi.jbat.ui;
+package earth.eu.jtzipi.jbat.ui.table;
 
 import javafx.beans.property.*;
 import javafx.scene.control.Control;
@@ -9,6 +9,9 @@ import javafx.scene.text.Font;
 
 /**
  * Custom Table Header Component .
+ *
+ *
+ * @author jTzipi
  */
 public class TableHeader extends Control {
 
@@ -30,7 +33,7 @@ public class TableHeader extends Control {
 
     DoubleProperty fxHeightProp = new SimpleDoubleProperty( this, "FX_HEIGHT_PROP" );
 
-    TableHeader( String textStr, double w, double h ) {
+    public TableHeader( String textStr, double w, double h ) {
 
         this.fxWidthProp.setValue( w );
         this.fxHeightProp.setValue( h );
@@ -40,6 +43,15 @@ public class TableHeader extends Control {
 
     public final StringProperty textPropFX() {
         return this.fxTextProp;
+    }
+
+    public static TableHeader of( String text, double width, double height ) {
+
+        if ( null == text ) {
+            text = "";
+        }
+
+        return new TableHeader( text, width, height );
     }
 
     @Override

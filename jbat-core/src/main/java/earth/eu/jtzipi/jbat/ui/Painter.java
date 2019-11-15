@@ -6,17 +6,29 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
+
+/**
+ * Painting Stuff .
+ */
 public final class Painter {
+
+    //
+    // Colors
 
     /**
      * Dark gray 60 RGB    .
      */
     public static final Color COLOR_GRAY_60 = Color.rgb( 60, 60, 60 );
+    /**
+     * Dark gray 47.
+     */
     public static final Color COLOR_GRAY_47 = Color.grayRgb( 47 );
     public static final Color COLOR_GRAY_29 = Color.grayRgb( 29 );
     public static final Color COLOR_GRAY_10 = Color.rgb( 10, 10, 10 );
     public static final Color COLOR_RGB_77_77_254 = Color.rgb( 77, 77, 254 );
     public static final Color COLOR_RGB_110_110_255 = Color.rgb( 110, 110, 255 );
+
+    // Stops
 
     public static final Stop STOP_BG_TOP = new Stop( 0D, COLOR_GRAY_60 );
 
@@ -26,6 +38,11 @@ public final class Painter {
 
     public static final Stop bgBottom = new Stop( 1D, COLOR_GRAY_10 );
 
+    /**
+     * Return a linear gradient dark.
+     *
+     * @return
+     */
     public static LinearGradient lgBlack0To100() {
         return new LinearGradient( 0D, 0D, 0D, 1D, true, CycleMethod.NO_CYCLE, STOP_BG_TOP, bgTopD, bgBottomUp, bgBottom );
     }
