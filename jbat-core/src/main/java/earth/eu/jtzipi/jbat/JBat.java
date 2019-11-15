@@ -107,9 +107,9 @@ public class JBat extends Application {
     /**
      *
      * @param primaryStage primary
-     * @throws Exception failed
+     *
      */
-    public void start( Stage primaryStage ) throws Exception {
+    public void start( Stage primaryStage ) {
 
         loadResource(); // load resources
 

@@ -56,7 +56,7 @@ public final class MainPane extends BorderPane {
     /**
      * Single MainPane.
      *
-     * @return
+     * @return single main
      */
     public static MainPane getInstance() {
 
