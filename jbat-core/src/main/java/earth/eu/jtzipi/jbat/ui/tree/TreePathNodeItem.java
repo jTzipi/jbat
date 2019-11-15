@@ -8,8 +8,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,7 +24,7 @@ import java.util.stream.Collectors;
  * @author jTz
  */
 public class TreePathNodeItem extends TreeItem<IPathNode> {
-
+    private static final Logger Log = LoggerFactory.getLogger( "TPNI" );
     private boolean created;
 
     private ObjectProperty<Predicate<Path>> fxPathPredicateProp = new SimpleObjectProperty<>( this, "FX_PATH_FILTER_PROP", IOUtils.PATH_ACCEPT_ALL );
@@ -50,7 +54,9 @@ public class TreePathNodeItem extends TreeItem<IPathNode> {
         }
 
         if( !created ) {
-            super.getChildren().setAll( pathNode.getSubnodes()
+            List<? extends IPathNode> pL = pathNode.getSubnodes( Files::isDirectory );
+            // Log.error( "IPath ? " + pL );
+            super.getChildren().setAll( pL
                     .stream()
                     .filter( IPathNode::isDir )
                     .map( pn -> TreePathNodeItem.of( pn ) )

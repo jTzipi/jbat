@@ -1,4 +1,4 @@
-package earth.eu.jtzipi.jbat.image;
+package earth.eu.jtzipi.jbat.ui.task;
 
 import javafx.concurrent.Task;
 

@@ -2,12 +2,13 @@ package earth.eu.jtzipi.jbat.ui.table;
 
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import earth.eu.jtzipi.jbat.ui.node.PathNodeFX;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.scene.Node;
-import javafx.scene.control.TableCell;
 
-public class PathNodeTableCell extends TableCell<PathNodeFX, IPathNode> {
+
+public class PathNodeTableCell extends PathNodeBasicTableCell<IPathNode> {
+
+
 
     private static MaterialDesignIconView iconForNode( IPathNode node ) {
 
@@ -44,6 +45,7 @@ public class PathNodeTableCell extends TableCell<PathNodeFX, IPathNode> {
 
             graphics = iconForNode( item );
         }
+
         setText(text);
         setGraphic( graphics );
 

@@ -1,10 +1,9 @@
 package earth.eu.jtzipi.jbat.ui.table;
 
-import earth.eu.jtzipi.jbat.ui.node.PathNodeFX;
 import earth.eu.jtzipi.modules.io.IOUtils;
-import javafx.scene.control.TableCell;
 
-public class PathNodeLengthTableCell extends TableCell<PathNodeFX, Long> {
+
+public class PathNodeLengthTableCell extends PathNodeBasicTableCell<Long> {
 
     @Override
     protected void updateItem( Long item, boolean empty ) {

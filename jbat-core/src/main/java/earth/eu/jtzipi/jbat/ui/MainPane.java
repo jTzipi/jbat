@@ -143,8 +143,9 @@ public final class MainPane extends BorderPane {
 
         chooseDirB = new Button( "Dir..." );
         startSearchB = new Button( "Start" );
+        startSearchB.setDisable( true );
         cancelSearchB = new Button( "Cancel" );
-
+        cancelSearchB.setDisable( true );
 
         startSearchB.setOnAction( ae -> startSearch( searchCombB.getValue() ) );
         chooseDirB.setOnAction( ae -> showDirChooser() );
@@ -189,6 +190,8 @@ public final class MainPane extends BorderPane {
                 IPathNode dir = RegularPathNode.of( file.toPath(), null );
                 searchCombB.getItems().add( dir );
                 searchCombB.getSelectionModel().select( dir );
+
+                startSearchB.setDisable( false );
             }
 
         }

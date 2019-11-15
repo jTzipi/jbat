@@ -112,7 +112,6 @@ public class PathPane extends BorderPane {
         Color COLOR_BG_BOTTOM = Color.rgb(
                 10, 10, 10 );
 
-
         Stop bgTop = new Stop( 0D, COLOR_BG_TOP );
 
         Stop bgTopD = new Stop( 0.21D, COLOR_BG_TOP_DOWN );
@@ -170,7 +169,7 @@ public class PathPane extends BorderPane {
         nameTC.setCellValueFactory( cb-> cb.getValue().getPathNodeProp() );
         nameTC.setCellFactory( cb -> new PathNodeTableCell() );
         nameTC.setPrefWidth( 500D );
-        nameTC.setGraphic( createGradient() );
+        nameTC.setGraphic( new TableHeader( "File", 500D, 46D ) );
         // Path size
         TableColumn<PathNodeFX, Long> lengthTC = new TableColumn<>("Length");
         lengthTC.setCellValueFactory( new PropertyValueFactory<>( "length" ) );
