@@ -9,7 +9,6 @@ import javafx.scene.Node;
 public class PathNodeTableCell extends PathNodeBasicTableCell<IPathNode> {
 
 
-
     private static MaterialDesignIconView iconForNode( IPathNode node ) {
 
         MaterialDesignIcon icon;

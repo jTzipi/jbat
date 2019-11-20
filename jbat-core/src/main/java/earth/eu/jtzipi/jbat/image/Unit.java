@@ -9,5 +9,7 @@ public enum Unit {
     PERCENT,
     ;
 
+    private Unit() {
 
+    }
 }

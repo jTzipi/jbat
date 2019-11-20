@@ -4,11 +4,21 @@ import earth.eu.jtzipi.jbat.ui.Painter;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.SkinBase;
-import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
+import javafx.scene.shape.ArcType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.image.BufferedImage;
 
 
+/**
+ *
+ */
 public class TableHeaderCover extends SkinBase<TableHeader> {
+
+    private static final Logger LOG = LoggerFactory.getLogger( "TableHCover" );
+
     /**
      * Minimum width.
      */
@@ -22,24 +32,33 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
     /** Preferred height. */
     public static final double HEIGHT_PREF = 26D;
 
-    GraphicsContext gc;
-    Canvas canvas;
-    LinearGradient bgGradient;
+    public static final double HEIGHT_MAX = 100D;
 
-    double w;
-    double h;
+    private BufferedImage backgroundCache;
+    private GraphicsContext gc;
+    Canvas canvas;
+    LinearGradient bgGradient = Painter.LINEAR_GRADIENT_TABLE_HEADER;
+    LinearGradient bgGradientInverse = Painter.LINEAR_GRADIENT_TABLE_HEADER_INVERSE;
+
+    double w;   // width of canvas
+    double h;   //
 
     public TableHeaderCover( final TableHeader th ) {
         super( th );
-        this.w = th.fxWidthProp.doubleValue();
-        this.h = th.fxHeightProp.doubleValue();
+        this.w = th.widthProperty().doubleValue();
+        this.h = th.heightProperty().doubleValue();
         init();
-        draw();
+        draw( w, h );
     }
 
     private void init() {
 
-        bgGradient = new LinearGradient( 0D, 0D, 0D, 1D, true, CycleMethod.NO_CYCLE, Painter.STOP_BG_TOP, Painter.bgTopD, Painter.bgBottomUp, Painter.bgBottom );
+        TableHeader th = getSkinnable();
+
+        th.setOnMouseClicked( evt -> redraw() );
+        th.widthProperty().addListener( evt -> redraw() );
+        th.setOnMouseEntered( evt -> onMouseEntered() );
+
     }
 
     @Override
@@ -53,8 +72,17 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
         return Math.max( HEIGHT_PREF, h );
     }
 
-    private void draw() {
-        canvas = new Canvas( w, h );
+    private void onMouseEntered() {
+
+        LOG.warn( "Gysi" );
+    }
+
+    private void redraw() {
+        LOG.warn( "Mouse" );
+    }
+
+    private void draw( double width, double height ) {
+        canvas = new Canvas( width, height );
         TableHeader th = getSkinnable();
 
 
@@ -65,10 +93,17 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
         gc.setFill( bgGradient );
         gc.fillRect( 0D, 0D, w, h );
         // text
-        gc.setFill( th.fxTextPaintProp.get() );
+        gc.setFont( th.fxFontProp.getValue() );
+        gc.setStroke( th.fxTextPaintProp.get() );
         gc.strokeText( th.textPropFX().getValue(), 9D, 30D );
 
 
+        gc.setLineWidth( 1.4D );
+        gc.setStroke( bgGradientInverse );
+        gc.strokeLine( 0D, 0D, 0D, h );
+
+        gc.setStroke( Painter.COLOR_GRAY_60 );
+        gc.strokeArc( w - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
         getChildren().add( canvas );
 
     }

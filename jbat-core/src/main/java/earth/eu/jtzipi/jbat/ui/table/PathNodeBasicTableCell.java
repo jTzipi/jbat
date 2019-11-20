@@ -9,9 +9,9 @@ import javafx.scene.text.Font;
 
 public abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S> {
 
-    Background bgEven = new Background( new BackgroundFill( Painter.COLOR_GRAY_29, null, null ) );
-    Background bgOdd = new Background( new BackgroundFill( Painter.COLOR_GRAY_10, null, null ) );
-    Font font = Font.font( 18D );
+    private final Background bgEven = new Background( new BackgroundFill( Painter.COLOR_GRAY_29, null, null ) );
+    private Background bgOdd = new Background( new BackgroundFill( Painter.COLOR_GRAY_19, null, null ) );
+    Font font = Font.font( 15D );
 
     PathNodeBasicTableCell() {
         setFont( font );

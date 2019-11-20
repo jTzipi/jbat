@@ -41,6 +41,10 @@ public final class JBatGlobal {
 
     public static final  DoubleBinding FX_PREF_WIDTH_MAIN_75 = FX_HEIGHT_PROP.multiply( 0.78D );
 
+
+    /**
+     * Single main stage.
+     */
     public static Stage MAIN_STAGE;
     /**
      * search task executor.
