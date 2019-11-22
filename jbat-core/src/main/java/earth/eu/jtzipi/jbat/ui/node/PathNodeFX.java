@@ -116,7 +116,9 @@ public class PathNodeFX {
     }
 
 
-
+    public String getPlaceholder() {
+        return "";
+    }
     private void init( final IPathNode pn ) {
         this.fxNameProp.setValue( pn.getName() );
         boolean dir = pn.isDir();

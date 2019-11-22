@@ -5,6 +5,7 @@ import earth.eu.jtzipi.jbat.ui.node.PathNodeFX;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.text.Font;
 
 public abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S> {
@@ -24,7 +25,7 @@ public abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S>
         super.updateItem( item, empty );
 
         setBackground( getIndex() % 2 == 0 ? bgEven : bgOdd );
-
+        setBorder( Border.EMPTY );
 
     }
 }

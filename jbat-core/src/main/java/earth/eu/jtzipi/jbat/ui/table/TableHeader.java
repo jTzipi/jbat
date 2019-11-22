@@ -1,13 +1,13 @@
 package earth.eu.jtzipi.jbat.ui.table;
 
 import earth.eu.jtzipi.jbat.Resources;
-import earth.eu.jtzipi.jbat.ui.Painter;
 import earth.eu.jtzipi.modules.utils.Utils;
 import javafx.beans.property.*;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
@@ -18,27 +18,30 @@ import javafx.scene.text.Font;
  * @author jTzipi
  */
 public class TableHeader extends Control {
-
-
-    enum Sort {
+    /**
+     * Sort order.
+     */
+    public enum Sort {
 
         /**
          * Ascending.
          */
-        ASC( 0 ),
+        ASC( 0, TableColumn.SortType.ASCENDING ),
         /**
          *
          */
-        DESC( 1 ),
+        DESC( 1, TableColumn.SortType.DESCENDING ),
         /**
          *
          */
-        NONE( 2 );
+        NONE( 2, null );
 
         private int id;
+        private TableColumn.SortType type;
 
-        private Sort( int id ) {
+        Sort( int id, TableColumn.SortType type ) {
             this.id = id;
+            this.type = type;
         }
 
         Sort click() {
@@ -60,22 +63,41 @@ public class TableHeader extends Control {
 
             return next;
         }
+
+        /**
+         * TableColumn sort type.
+         *
+         * @return sort type
+         */
+        public TableColumn.SortType getSort() {
+            return this.type;
+        }
     }
 
     /** Table Column Sort Order Property.*/
-    private ObjectProperty<TableColumn.SortType> fySortProp = new SimpleObjectProperty<>();
+    ObjectProperty<TableColumn.SortType> fxTableColumnSortProp = new SimpleObjectProperty<>();
+    /**
+     * control sort type.
+     */
     ObjectProperty<Sort> fxSortTypeProp = new SimpleObjectProperty<>( this, "FX_SORT_TYPE_PROP" );
+    /**
+     * Text of header .
+     */
     StringProperty fxTextProp = new SimpleStringProperty( this, "FX_TEXT_PROP", "" );     // text of header
-
+    /**
+     * Cache width.
+     */
     DoubleProperty fxCacheWidthProp = new SimpleDoubleProperty( this, "FX_CACHE_WIDTH_PROP" );
-
-    ObjectProperty<Paint> fxTextPaintProp = new SimpleObjectProperty<>( this, "FX_TEXT_FILL_PROP", Painter.COLOR_RGB_77_77_254 );
-
+    /**
+     * Text paint.
+     */
+    ObjectProperty<Paint> fxTextPaintProp = new SimpleObjectProperty<>( this, "FX_TEXT_FILL_PROP", Color.grayRgb( 90 ) );
+    /** Icon .*/
     ObjectProperty<Image> fxIconProp = new SimpleObjectProperty<>( this, "FX_ICON_PROP" );
 
     ObjectProperty<Font> fxFontProp = new SimpleObjectProperty<>();
 
-    Sort sort = Sort.ASC;
+    Sort sort = Sort.NONE;
 
     TableHeader( double w, double h ) {
         setWidth( w );
@@ -91,10 +113,6 @@ public class TableHeader extends Control {
 
     public final ObjectProperty<Font> fontPropFX() {
         return this.fxFontProp;
-    }
-
-    public final ObjectProperty<TableColumn.SortType> sortPropFY() {
-        return this.fySortProp;
     }
 
     public final ObjectProperty<Sort> sortTypeProp() {
@@ -132,7 +150,10 @@ public class TableHeader extends Control {
 
         sort = sort.click();
         fxSortTypeProp.setValue( sort );
-        fySortProp.setValue( sort == Sort.ASC ? TableColumn.SortType.ASCENDING : TableColumn.SortType.DESCENDING );
+        fxTableColumnSortProp.setValue( sort.getSort() );
+
+        System.out.println( "SOrt ist nun " + sort );
+
 
     }
 

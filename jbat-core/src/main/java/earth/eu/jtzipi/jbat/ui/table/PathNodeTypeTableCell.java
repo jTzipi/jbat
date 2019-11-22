@@ -7,6 +7,10 @@ public class PathNodeTypeTableCell extends PathNodeBasicTableCell<String> {
     protected void updateItem( String item, boolean empty ) {
         super.updateItem( item, empty );
 
-
+        if ( null == item || empty ) {
+            setText( "" );
+        } else {
+            setText( item );
+        }
     }
 }

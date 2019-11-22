@@ -21,7 +21,7 @@ import java.nio.file.attribute.FileTime;
  *
  * @author jtzipi
  */
-public class PathPane extends BorderPane {
+class PathPane extends BorderPane {
 
 
     private static final Logger LOG = LoggerFactory.getLogger( "Pathpane" );
@@ -107,6 +107,7 @@ public class PathPane extends BorderPane {
         // header.setFill( Color.rgb( 77, 77, 254 ) );
         // new TableHeader( 500D, 46D )
         TableHeader fileHeader = TableHeader.of( "File", 500D, 46D );
+
         fileHeader.setTranslateX( -3D );
 
 
@@ -116,7 +117,7 @@ public class PathPane extends BorderPane {
         nameTC.setCellFactory( cb -> new PathNodeTableCell() );
         nameTC.setPrefWidth( 500D );
         nameTC.setGraphic( fileHeader );
-        nameTC.sortTypeProperty().bind( fileHeader.sortPropFY() );
+
 
         TableHeader lenHeader = TableHeader.of( "Length", 100D, 46D );
         lenHeader.setTranslateX( -3D );
@@ -153,11 +154,16 @@ public class PathPane extends BorderPane {
         pathExtTC.setGraphic( extHeader );
         pathExtTC.setPrefWidth( 77D );
 
+        TableColumn<PathNodeFX, String> placeholder = new TableColumn<>( "placeholder" );
+        placeholder.setPrefWidth( 5000 );
+        placeholder.setCellFactory( callback -> new PathNodePlaceholderTableCell() );
+
         tv.getColumns().add(nameTC);
         tv.getColumns().add(pathExtTC);
         tv.getColumns().add( lengthTC );
         tv.getColumns().add( createdTC );
 
+        tv.getSortOrder().setAll( nameTC );
         return tv;
     }
 

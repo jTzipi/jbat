@@ -5,34 +5,37 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.SkinBase;
 import javafx.scene.paint.LinearGradient;
-import javafx.scene.shape.ArcType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 
 
+
 /**
  *
  */
-public class TableHeaderCover extends SkinBase<TableHeader> {
+public final class TableHeaderCover extends SkinBase<TableHeader> {
 
+    //  double[] arrowX = { canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 17D };
+    //        double[] arrowY = { 4D, 9D, 14D };
     private static final Logger LOG = LoggerFactory.getLogger( "TableHCover" );
 
+    private static final double X_EAST_OFF = 5D;
     /**
      * Minimum width.
      */
-    public static final double WIDTH_MIN = 9D;
+    static final double WIDTH_MIN = 9D;
     /**
      * Maximum width.
      */
-    public static final double WIDTH_MAX = 9999D;
+    static final double WIDTH_MAX = 9999D;
     /** Minimum height. */
-    public static final double HEIGHT_MIN = 9D;
+    static final double HEIGHT_MIN = 9D;
     /** Preferred height. */
-    public static final double HEIGHT_PREF = 26D;
+    static final double HEIGHT_PREF = 26D;
 
-    public static final double HEIGHT_MAX = 100D;
+    static final double HEIGHT_MAX = 100D;
 
     private BufferedImage backgroundCache;
     private GraphicsContext gc;
@@ -40,25 +43,31 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
     LinearGradient bgGradient = Painter.LINEAR_GRADIENT_TABLE_HEADER;
     LinearGradient bgGradientInverse = Painter.LINEAR_GRADIENT_TABLE_HEADER_INVERSE;
 
-    double w;   // width of canvas
-    double h;   //
+    double canvasWidth;     // width of canvas
+    double canvasHeight;    // height of
+    boolean highlight;      // draw highlight when mouse over
+    boolean clicked;        // draw bright when clicked
 
     public TableHeaderCover( final TableHeader th ) {
         super( th );
-        this.w = th.widthProperty().doubleValue();
-        this.h = th.heightProperty().doubleValue();
+        this.canvasWidth = th.widthProperty().doubleValue();
+        this.canvasHeight = th.heightProperty().doubleValue();
+        this.canvas = new Canvas( canvasWidth, canvasHeight );
         init();
-        draw( w, h );
+        draw();
+        getChildren().setAll( canvas );
     }
 
     private void init() {
 
         TableHeader th = getSkinnable();
 
-        th.setOnMouseClicked( evt -> redraw() );
-        th.widthProperty().addListener( evt -> redraw() );
-        th.setOnMouseEntered( evt -> onMouseEntered() );
 
+        th.prefWidthProperty().addListener( ( obs, oW, nW ) -> resize( oW.doubleValue(), nW.doubleValue() ) );
+        th.setOnMouseEntered( evt -> onMouseEntered() );
+        th.setOnMouseExited( evt -> onMouseExited() );
+
+        th.sortTypeProp().addListener( change -> draw() );
     }
 
     @Override
@@ -69,29 +78,52 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
 
     @Override
     protected double computePrefHeight( double width, double topInset, double rightInset, double bottomInset, double leftInset ) {
-        return Math.max( HEIGHT_PREF, h );
+        return Math.max( HEIGHT_PREF, canvasHeight );
+    }
+
+    @Override
+    protected double computeMaxHeight( double width, double topInset, double rightInset, double bottomInset, double leftInset ) {
+        return HEIGHT_MAX;
     }
 
     private void onMouseEntered() {
+        this.highlight = true;
 
         LOG.warn( "Gysi" );
+        draw();
     }
 
-    private void redraw() {
-        LOG.warn( "Mouse" );
+    private void onMouseExited() {
+        this.highlight = false;
+        LOG.warn( "Gysi" );
+        draw();
     }
 
-    private void draw( double width, double height ) {
-        canvas = new Canvas( width, height );
+
+    private void resize( final double oldWidth, final double newWidth ) {
+        if ( oldWidth == newWidth ) {
+            return;
+        }
+        // TODO: clamp
+        if ( Double.compare( newWidth, canvasWidth ) != 0 ) {
+            this.canvasWidth = newWidth;
+        }
+
+        this.canvas = new Canvas( canvasWidth, canvasHeight );
+        draw();
+        getChildren().setAll( canvas );
+    }
+
+    private void draw() {
+
         TableHeader th = getSkinnable();
 
 
         gc = canvas.getGraphicsContext2D();
 
-
         // background gradient
         gc.setFill( bgGradient );
-        gc.fillRect( 0D, 0D, w, h );
+        gc.fillRect( 0D, 0D, canvasWidth, canvasHeight );
         // text
         gc.setFont( th.fxFontProp.getValue() );
         gc.setStroke( th.fxTextPaintProp.get() );
@@ -100,11 +132,27 @@ public class TableHeaderCover extends SkinBase<TableHeader> {
 
         gc.setLineWidth( 1.4D );
         gc.setStroke( bgGradientInverse );
-        gc.strokeLine( 0D, 0D, 0D, h );
+        gc.strokeLine( 0D, 0D, 0D, canvasHeight );
 
         gc.setStroke( Painter.COLOR_GRAY_60 );
-        gc.strokeArc( w - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
-        getChildren().add( canvas );
+        // gc.strokeArc( canvasWidth - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
+
+        TableHeader.Sort type = th.sortTypeProp().getValue();
+        double[] downX = {canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 27D};
+        double[] downY = {24D, 29D, 24D};
+
+        double[] upX = {canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 27D};
+        double[] upY = {19D, 14D, 19D};
+
+
+        gc.setStroke( type == TableHeader.Sort.ASC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
+        gc.strokePolyline( upX, upY, 3 );
+        gc.setStroke( type == TableHeader.Sort.DESC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
+        gc.strokePolyline( downX, downY, 3 );
+
+        // getChildren().set( 0, canvas );
 
     }
+
+
 }
