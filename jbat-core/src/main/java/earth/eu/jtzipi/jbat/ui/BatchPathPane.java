@@ -1,6 +1,7 @@
 package earth.eu.jtzipi.jbat.ui;
 
 
+import earth.eu.jtzipi.jbat.JBatGlobal;
 import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.io.task.FindPathTask;
 import earth.eu.jtzipi.modules.io.task.PathCrawler;
@@ -9,10 +10,14 @@ import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +31,7 @@ import java.util.function.Predicate;
 
 public class BatchPathPane extends BorderPane {
 
-
+    private static final Border DOTTED_BORDER = new Border( new BorderStroke( Painter.COLOR_GRAY_47, BorderStrokeStyle.DASHED, new CornerRadii( 14D ), new BorderWidths( 3D ) ) );
 
     private TreeTableView<IPathNode> ttv;  // tree table for found path
     private ObservableList<IPathNode> foundImgOL = FXCollections.observableArrayList();
@@ -46,9 +51,22 @@ public class BatchPathPane extends BorderPane {
         TreeTableColumn<IPathNode, IPathNode> nameTTC = new TreeTableColumn<>("File");
 
 
-        ttv.getColumns().add( nameTTC );
+        // ttv.getColumns().add( nameTTC );
+        ttv.setPlaceholder( createPlaceholder() );
+
 
         return ttv;
+    }
+
+    private static Node createPlaceholder() {
+
+        Label label = new Label( "Drag & Drop Images here" );
+        label.setBorder( DOTTED_BORDER );
+        label.setOpaqueInsets( new Insets( 5D ) );
+        label.setPrefSize( 500D, 90D );
+        label.setTextAlignment( TextAlignment.CENTER );
+        label.fontProperty().bind( JBatGlobal.FX_FONT_MAIN_PROP );
+        return label;
     }
 
     static class CrawlForImageTask extends Task<Path> {

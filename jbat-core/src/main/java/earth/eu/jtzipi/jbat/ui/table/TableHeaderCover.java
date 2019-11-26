@@ -13,13 +13,22 @@ import java.awt.image.BufferedImage;
 
 
 /**
+ * Table Header Cover.
  *
+ * This is a custom table header 'cover' with a gradient, custom font and highlighting.
+ * We use several cache techniques.
+ *
+ * <ul>
+ *     <li>static sized canvas with multiple length of table column to ensure that canvas is large enough</li>
+ *     <li>cache background gradient as buffered image</li>
+ * </ul>
  */
 public final class TableHeaderCover extends SkinBase<TableHeader> {
 
     //  double[] arrowX = { canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 17D };
     //        double[] arrowY = { 4D, 9D, 14D };
     private static final Logger LOG = LoggerFactory.getLogger( "TableHCover" );
+
 
     private static final double X_EAST_OFF = 5D;
     /**
@@ -50,8 +59,8 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
 
     public TableHeaderCover( final TableHeader th ) {
         super( th );
-        this.canvasWidth = th.widthProperty().doubleValue();
-        this.canvasHeight = th.heightProperty().doubleValue();
+        this.canvasWidth = th.cacheBG ? 4 * th.getWidth() : th.getWidth();
+        this.canvasHeight = th.getHeight();
         this.canvas = new Canvas( canvasWidth, canvasHeight );
         init();
         draw();
@@ -63,7 +72,6 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
         TableHeader th = getSkinnable();
 
 
-        th.prefWidthProperty().addListener( ( obs, oW, nW ) -> resize( oW.doubleValue(), nW.doubleValue() ) );
         th.setOnMouseEntered( evt -> onMouseEntered() );
         th.setOnMouseExited( evt -> onMouseExited() );
 
@@ -100,20 +108,6 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
     }
 
 
-    private void resize( final double oldWidth, final double newWidth ) {
-        if ( oldWidth == newWidth ) {
-            return;
-        }
-        // TODO: clamp
-        if ( Double.compare( newWidth, canvasWidth ) != 0 ) {
-            this.canvasWidth = newWidth;
-        }
-
-        this.canvas = new Canvas( canvasWidth, canvasHeight );
-        draw();
-        getChildren().setAll( canvas );
-    }
-
     private void draw() {
 
         TableHeader th = getSkinnable();
@@ -137,11 +131,12 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
         gc.setStroke( Painter.COLOR_GRAY_60 );
         // gc.strokeArc( canvasWidth - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
 
+        double realWidth = th.getPrefWidth();
         TableHeader.Sort type = th.sortTypeProp().getValue();
-        double[] downX = {canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 27D};
+        double[] downX = {realWidth - 17D, realWidth - 22D, realWidth - 27D};
         double[] downY = {24D, 29D, 24D};
 
-        double[] upX = {canvasWidth - 17D, canvasWidth - 22D, canvasWidth - 27D};
+        double[] upX = {realWidth - 17D, realWidth - 22D, realWidth - 27D};
         double[] upY = {19D, 14D, 19D};
 
 

@@ -2,7 +2,10 @@ package earth.eu.jtzipi.jbat.ui.table;
 
 import earth.eu.jtzipi.jbat.Resources;
 import earth.eu.jtzipi.modules.utils.Utils;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
@@ -84,27 +87,33 @@ public class TableHeader extends Control {
      * Text of header .
      */
     StringProperty fxTextProp = new SimpleStringProperty( this, "FX_TEXT_PROP", "" );     // text of header
-    /**
-     * Cache width.
-     */
-    DoubleProperty fxCacheWidthProp = new SimpleDoubleProperty( this, "FX_CACHE_WIDTH_PROP" );
+
+
     /**
      * Text paint.
      */
-    ObjectProperty<Paint> fxTextPaintProp = new SimpleObjectProperty<>( this, "FX_TEXT_FILL_PROP", Color.grayRgb( 90 ) );
+    ObjectProperty<Paint> fxTextPaintProp = new SimpleObjectProperty<>( this, "FX_TEXT_FILL_PROP", Color.grayRgb( 9 ) );
     /** Icon .*/
     ObjectProperty<Image> fxIconProp = new SimpleObjectProperty<>( this, "FX_ICON_PROP" );
 
     ObjectProperty<Font> fxFontProp = new SimpleObjectProperty<>();
 
     Sort sort = Sort.NONE;
+    boolean cacheBG;
 
-    TableHeader( double w, double h ) {
+    TableHeader( double w, double h, boolean cachedProp ) {
         setWidth( w );
         setHeight( h );
-        this.fxCacheWidthProp.setValue( 4 * w );
+        setPrefWidth( w );
+        setPrefHeight( h );
+        this.cacheBG = cachedProp;
+
         this.fxSortTypeProp.setValue( sort );
 
+    }
+
+    public final ObjectProperty<TableColumn.SortType> fyTableColumnSortTypeProp() {
+        return this.fxTableColumnSortProp;
     }
 
     public final StringProperty textPropFX() {
@@ -136,11 +145,11 @@ public class TableHeader extends Control {
      * @param height
      * @return
      */
-    public static TableHeader of( String text, double width, double height ) {
+    public static TableHeader of( String text, double width, double height, boolean cachedProp ) {
         width = Utils.clamp( width, TableHeaderCover.WIDTH_MIN, TableHeaderCover.WIDTH_MAX );
 
 
-        TableHeader theader = new TableHeader( width, height );
+        TableHeader theader = new TableHeader( width, height, cachedProp );
         theader.init( text );
 
         return theader;

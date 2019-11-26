@@ -101,12 +101,12 @@ class PathPane extends BorderPane {
 
         tv.getItems().setAll( list );
         tv.setEditable( false );
-
+        tv.setOnDragDetected( evt -> LOG.info( "Start D" ) );
 
         // Rectangle header = new Rectangle( 500, 50D );
         // header.setFill( Color.rgb( 77, 77, 254 ) );
         // new TableHeader( 500D, 46D )
-        TableHeader fileHeader = TableHeader.of( "File", 500D, 46D );
+        TableHeader fileHeader = TableHeader.of( "Path", 500D, 46D, true );
 
         fileHeader.setTranslateX( -3D );
 
@@ -117,9 +117,9 @@ class PathPane extends BorderPane {
         nameTC.setCellFactory( cb -> new PathNodeTableCell() );
         nameTC.setPrefWidth( 500D );
         nameTC.setGraphic( fileHeader );
+        nameTC.sortTypeProperty().bind( fileHeader.fyTableColumnSortTypeProp() );
 
-
-        TableHeader lenHeader = TableHeader.of( "Length", 100D, 46D );
+        TableHeader lenHeader = TableHeader.of( "Length", 100D, 46D, false );
         lenHeader.setTranslateX( -3D );
         // Path size
         TableColumn<PathNodeFX, Long> lengthTC = new TableColumn<>("Length");
@@ -128,14 +128,14 @@ class PathPane extends BorderPane {
         lengthTC.setPrefWidth( 100D );
         lengthTC.setGraphic( lenHeader );
 
-        TableHeader typeHeader = TableHeader.of( "Type", 100D, 46D );
+        TableHeader typeHeader = TableHeader.of( "Type", 100D, 46D, false );
         typeHeader.setTranslateX( -3D );
         // Type
         TableColumn<PathNodeFX, FileTime> typeTC = new TableColumn<>("L.A.");
         typeTC.setCellValueFactory( new PropertyValueFactory<>( "type" ) );
         typeTC.setPrefWidth( 100D );
 // Path last Access
-        TableHeader createdHeader = TableHeader.of( "", 100D, 46 );
+        TableHeader createdHeader = TableHeader.of( "", 100D, 46, false );
         createdHeader.setTranslateX( -3D );
 
         // Path created
@@ -145,7 +145,7 @@ class PathPane extends BorderPane {
         createdTC.setPrefWidth( 100D );
         createdTC.setGraphic( createdHeader );
 
-        TableHeader extHeader = TableHeader.of( "Ext", 77D, 46D );
+        TableHeader extHeader = TableHeader.of( "Ext", 77D, 46D, false );
         extHeader.setTranslateX( -3D );
         // Path extension
         TableColumn<PathNodeFX, String> pathExtTC =  new TableColumn<>("Ext");
@@ -163,6 +163,7 @@ class PathPane extends BorderPane {
         tv.getColumns().add( lengthTC );
         tv.getColumns().add( createdTC );
 
+
         tv.getSortOrder().setAll( nameTC );
         return tv;
     }
@@ -177,4 +178,7 @@ class PathPane extends BorderPane {
         dirTabV.getItems().setAll( PathNodeFX.createPathNodeFXList( newPath ) );
     }
 
+    private void onDragStarted() {
+
+    }
 }

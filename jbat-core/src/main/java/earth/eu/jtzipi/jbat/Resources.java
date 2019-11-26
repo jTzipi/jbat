@@ -1,6 +1,7 @@
 package earth.eu.jtzipi.jbat;
 
 
+import earth.eu.jtzipi.jbat.ui.IconStyle;
 import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.io.image.ImageDimension;
 import javafx.scene.image.Image;
@@ -26,8 +27,8 @@ public final class Resources {
     private static final Properties PROP_UI = new Properties();             // Properties
     private static final List<String> FONT_LIST = new ArrayList<>(); // new HashMap<>();      // All fonts
     private static final Map<String, Map<Double, Font>> FONT_MAP = new HashMap<>();
-    static final Map<ImageDimension, Map<String, Image>> ICON_MAP = new HashMap<>();
-
+    private static final Map<ImageDimension, Map<String, Image>> ICON_MAP = new HashMap<>();
+    private static final EnumMap<IconStyle, Map<String, Image>> ICON_CACHE_MAP = new EnumMap<IconStyle, Map<String, Image>>( IconStyle.class );
 
     static void loadResource() {
 
@@ -102,7 +103,10 @@ public final class Resources {
 
     }
 
+    public static Image getIconForPath( final Path path, IconStyle style ) {
 
+        return null;
+    }
     /**
      * Return font for property descriptor.
      *

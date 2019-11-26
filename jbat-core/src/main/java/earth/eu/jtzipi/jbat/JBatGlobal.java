@@ -1,5 +1,6 @@
 package earth.eu.jtzipi.jbat;
 
+import earth.eu.jtzipi.jbat.ui.IconStyle;
 import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
@@ -8,6 +9,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.concurrent.ExecutorService;
@@ -41,7 +43,9 @@ public final class JBatGlobal {
 
     public static final  DoubleBinding FX_PREF_WIDTH_MAIN_75 = FX_HEIGHT_PROP.multiply( 0.78D );
 
+    public static final ObjectProperty<IconStyle> FX_ICON_STYLE_PROP = new SimpleObjectProperty<>( IconStyle.BUUF );
 
+    public static final ObjectProperty<Font> FX_FONT_MAIN_PROP = new SimpleObjectProperty<>();
     /**
      * Single main stage.
      */
@@ -55,6 +59,7 @@ public final class JBatGlobal {
     static {
 
         FX_CURRENT_DIR_PATH.setValue( RegularPathNode.of( IOUtils.getHomeDir(), null ) );
+        FX_FONT_MAIN_PROP.setValue( Font.font( 18D ) );
     }
 
     private JBatGlobal() {
