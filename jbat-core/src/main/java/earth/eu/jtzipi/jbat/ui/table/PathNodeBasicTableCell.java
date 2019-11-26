@@ -10,7 +10,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import org.slf4j.LoggerFactory;
 
-public abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S> {
+/**
+ * Table Cell Common Cell.
+ *
+ * @param <S> Column Type
+ * @author jTzipi
+ */
+abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S> {
 
 
     private final ImageView iconView = new ImageView();
