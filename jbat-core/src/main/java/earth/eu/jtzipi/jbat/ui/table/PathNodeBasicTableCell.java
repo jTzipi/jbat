@@ -8,7 +8,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import org.slf4j.LoggerFactory;
 
 /**
  * Table Cell Common Cell.
@@ -45,10 +44,6 @@ abstract class PathNodeBasicTableCell<S> extends TableCell<PathNodeFX, S> {
 
     }
 
-    private void onSelectChanged( boolean oldFocus, boolean newFocus ) {
-        LoggerFactory.getLogger( "" ).warn( "Habe ?" + newFocus );
-        setBorder( newFocus ? bFocus : border );
-    }
 
     private void onIconStyleChange( IconStyle changedStyle ) {
 

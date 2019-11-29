@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
  *
  * @author jTz
  */
-public class TreePathNodeItem extends TreeItem<IPathNode> {
+public class PathNodeTreeItem extends TreeItem<IPathNode> {
     private static final Logger Log = LoggerFactory.getLogger( "TPNI" );
     private boolean created;
 
     private ObjectProperty<Predicate<Path>> fxPathPredicateProp = new SimpleObjectProperty<>( this, "FX_PATH_FILTER_PROP", IOUtils.PATH_ACCEPT_ALL );
 
-    TreePathNodeItem( final IPathNode pathNode ) {
+    PathNodeTreeItem( final IPathNode pathNode ) {
         super(pathNode);
         this.created = false;
     }
@@ -37,7 +37,7 @@ public class TreePathNodeItem extends TreeItem<IPathNode> {
     public static TreeItem<IPathNode> of( final IPathNode pn ) {
         Objects.requireNonNull(pn);
 
-        return new TreePathNodeItem( pn );
+        return new PathNodeTreeItem( pn );
     }
 
     @Override
@@ -59,7 +59,7 @@ public class TreePathNodeItem extends TreeItem<IPathNode> {
             super.getChildren().setAll( pL
                     .stream()
                     .filter( IPathNode::isDir )
-                    .map( pn -> TreePathNodeItem.of( pn ) )
+                    .map( pn -> PathNodeTreeItem.of( pn ) )
                     .collect( Collectors.toList() ) );
 
             created = true;

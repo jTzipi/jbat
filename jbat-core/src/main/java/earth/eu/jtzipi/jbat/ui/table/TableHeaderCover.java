@@ -8,8 +8,6 @@ import javafx.scene.paint.LinearGradient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.image.BufferedImage;
-
 
 
 /**
@@ -20,7 +18,7 @@ import java.awt.image.BufferedImage;
  *
  * <ul>
  *     <li>static sized canvas with multiple length of table column to ensure that canvas is large enough</li>
- *     <li>cache background gradient as buffered image</li>
+ *
  * </ul>
  */
 public final class TableHeaderCover extends SkinBase<TableHeader> {
@@ -42,11 +40,25 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
     /** Minimum height. */
     static final double HEIGHT_MIN = 9D;
     /** Preferred height. */
-    static final double HEIGHT_PREF = 26D;
+    static final double HEIGHT_PREF = 46D;
 
     static final double HEIGHT_MAX = 100D;
 
-    private BufferedImage backgroundCache;
+    static final double SCALE_TEXT = 0.75D;
+    static final double SCALE_LOW = 0.19D;
+    static final double ARROW_SEGMENT = 5D;
+    static final double SPACE = 5D;
+    static final double OFF_X_LEFT = SPACE * 2;
+    static final double LEN_ARROW = ARROW_SEGMENT + ARROW_SEGMENT;
+    static final double OFF_Y_ARROW_UP = 14D;
+    static final double OFF_Y_ARROW_DOWN = OFF_Y_ARROW_UP + 3D + ARROW_SEGMENT;
+    static final double OFF_X_TEXT = OFF_X_LEFT + LEN_ARROW + SPACE * 4;
+
+    static final double[] ARROW_PATH_X = {OFF_X_LEFT, OFF_X_LEFT + ARROW_SEGMENT, OFF_X_LEFT + ARROW_SEGMENT + ARROW_SEGMENT};
+    static final double[] ARROW_DOWN_PATH_Y = {OFF_Y_ARROW_DOWN, OFF_Y_ARROW_DOWN + ARROW_SEGMENT, OFF_Y_ARROW_DOWN};
+    static final double[] upY = {OFF_Y_ARROW_UP + ARROW_SEGMENT, OFF_Y_ARROW_UP, OFF_Y_ARROW_UP + ARROW_SEGMENT};
+
+
     private GraphicsContext gc;
     Canvas canvas;
     LinearGradient bgGradient = Painter.LINEAR_GRADIENT_TABLE_HEADER;
@@ -54,14 +66,20 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
 
     double canvasWidth;     // width of canvas
     double canvasHeight;    // height of
+
+    double fontSize;
+    double offYBottom;
     boolean highlight;      // draw highlight when mouse over
     boolean clicked;        // draw bright when clicked
 
     public TableHeaderCover( final TableHeader th ) {
         super( th );
-        this.canvasWidth = th.cacheBG ? 4 * th.getWidth() : th.getWidth();
+        this.canvasWidth = th.cacheBG ? 2 * th.getWidth() : th.getWidth();
         this.canvasHeight = th.getHeight();
         this.canvas = new Canvas( canvasWidth, canvasHeight );
+        this.fontSize = canvasHeight * SCALE_TEXT;
+        this.offYBottom = canvasHeight * SCALE_LOW + SPACE;
+
         init();
         draw();
         getChildren().setAll( canvas );
@@ -114,14 +132,14 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
 
 
         gc = canvas.getGraphicsContext2D();
-
+        // gc.clearRect( 0D, 0D, canvasWidth,canvasHeight );
         // background gradient
         gc.setFill( bgGradient );
         gc.fillRect( 0D, 0D, canvasWidth, canvasHeight );
         // text
         gc.setFont( th.fxFontProp.getValue() );
-        gc.setStroke( th.fxTextPaintProp.get() );
-        gc.strokeText( th.textPropFX().getValue(), 9D, 30D );
+        gc.setFill( th.fxTextPaintProp.get() );
+        gc.fillText( th.textPropFX().getValue(), OFF_X_TEXT, canvasHeight - offYBottom );
 
 
         gc.setLineWidth( 1.4D );
@@ -131,19 +149,12 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
         gc.setStroke( Painter.COLOR_GRAY_60 );
         // gc.strokeArc( canvasWidth - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
 
-        double realWidth = th.getPrefWidth();
         TableHeader.Sort type = th.sortTypeProp().getValue();
-        double[] downX = {realWidth - 17D, realWidth - 22D, realWidth - 27D};
-        double[] downY = {24D, 29D, 24D};
-
-        double[] upX = {realWidth - 17D, realWidth - 22D, realWidth - 27D};
-        double[] upY = {19D, 14D, 19D};
-
 
         gc.setStroke( type == TableHeader.Sort.ASC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
-        gc.strokePolyline( upX, upY, 3 );
+        gc.strokePolyline( ARROW_PATH_X, upY, 3 );
         gc.setStroke( type == TableHeader.Sort.DESC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
-        gc.strokePolyline( downX, downY, 3 );
+        gc.strokePolyline( ARROW_PATH_X, ARROW_DOWN_PATH_Y, 3 );
 
         // getChildren().set( 0, canvas );
 

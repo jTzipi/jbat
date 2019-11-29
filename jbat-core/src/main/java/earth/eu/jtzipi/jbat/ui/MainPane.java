@@ -4,7 +4,7 @@ import earth.eu.jtzipi.jbat.JBatGlobal;
 import earth.eu.jtzipi.jbat.ui.list.PathNodeListCellRenderer;
 import earth.eu.jtzipi.jbat.ui.task.SearchCache;
 import earth.eu.jtzipi.jbat.ui.tree.PathNodeTreeCell;
-import earth.eu.jtzipi.jbat.ui.tree.TreePathNodeItem;
+import earth.eu.jtzipi.jbat.ui.tree.PathNodeTreeItem;
 import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
@@ -71,7 +71,7 @@ public final class MainPane extends BorderPane {
         IPathNode root = JBatGlobal.FX_CURRENT_DIR_PATH.getValue();
 
         pp = new PathPane( root );
-        TreeItem<IPathNode> rootItem = TreePathNodeItem.of( root );
+        TreeItem<IPathNode> rootItem = PathNodeTreeItem.of( root );
 
         // TreeView<IPathNode> view = new TreeView<>(rootItem);
 

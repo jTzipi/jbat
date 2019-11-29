@@ -3,17 +3,25 @@ package earth.eu.jtzipi.jbat.ui;
 import earth.eu.jtzipi.jbat.JBatGlobal;
 import earth.eu.jtzipi.jbat.ui.node.PathNodeFX;
 import earth.eu.jtzipi.jbat.ui.table.*;
+import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.nio.file.attribute.FileTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,7 +56,7 @@ class PathPane extends BorderPane {
 
         dirTabV = createDirTableView( node );
         dirTabV.getSelectionModel().selectedItemProperty().addListener( (obs, oldPfx, newPfx ) -> onTablePathChanged( oldPfx, newPfx ) );
-
+        dirTabV.setOnDragDetected( evt -> onDragStarted( evt ) );
         setCenter( dirTabV );
 
     }
@@ -101,7 +109,7 @@ class PathPane extends BorderPane {
 
         tv.getItems().setAll( list );
         tv.setEditable( false );
-        tv.setOnDragDetected( evt -> LOG.info( "Start D" ) );
+
 
         // Rectangle header = new Rectangle( 500, 50D );
         // header.setFill( Color.rgb( 77, 77, 254 ) );
@@ -112,7 +120,7 @@ class PathPane extends BorderPane {
 
 
         // Path name
-        TableColumn<PathNodeFX, IPathNode> nameTC = new TableColumn<>("File");
+        TableColumn<PathNodeFX, IPathNode> nameTC = new TableColumn<>( "Path" );
         nameTC.setCellValueFactory( cb-> cb.getValue().getPathNodeProp() );
         nameTC.setCellFactory( cb -> new PathNodeTableCell() );
         nameTC.setPrefWidth( 500D );
@@ -135,7 +143,7 @@ class PathPane extends BorderPane {
         typeTC.setCellValueFactory( new PropertyValueFactory<>( "type" ) );
         typeTC.setPrefWidth( 100D );
 // Path last Access
-        TableHeader createdHeader = TableHeader.of( "", 100D, 46, false );
+        TableHeader createdHeader = TableHeader.of( "", 100D, 46D, false );
         createdHeader.setTranslateX( -3D );
 
         // Path created
@@ -148,20 +156,19 @@ class PathPane extends BorderPane {
         TableHeader extHeader = TableHeader.of( "Ext", 77D, 46D, false );
         extHeader.setTranslateX( -3D );
         // Path extension
-        TableColumn<PathNodeFX, String> pathExtTC =  new TableColumn<>("Ext");
-        pathExtTC.setCellValueFactory( new PropertyValueFactory<>( "extension" ) );
-        pathExtTC.setCellFactory( callback -> new PathNodeTypeTableCell() );
-        pathExtTC.setGraphic( extHeader );
-        pathExtTC.setPrefWidth( 77D );
+        TableColumn<PathNodeFX, String> extTC = new TableColumn<>( "Ext" );
+        extTC.setCellValueFactory( new PropertyValueFactory<>( "extension" ) );
+        extTC.setCellFactory( callback -> new PathNodeTypeTableCell() );
+        extTC.setGraphic( extHeader );
+        extTC.setPrefWidth( 77D );
+
+        TableHeader placeHeader = TableHeader.of( "", 1000D, 46D, false );
 
         TableColumn<PathNodeFX, String> placeholder = new TableColumn<>( "placeholder" );
-        placeholder.setPrefWidth( 5000 );
+        placeholder.setPrefWidth( 1000 );
         placeholder.setCellFactory( callback -> new PathNodePlaceholderTableCell() );
-
-        tv.getColumns().add(nameTC);
-        tv.getColumns().add(pathExtTC);
-        tv.getColumns().add( lengthTC );
-        tv.getColumns().add( createdTC );
+        placeholder.setGraphic( placeHeader );
+        tv.getColumns().addAll( nameTC, extTC, lengthTC, createdTC, placeholder );
 
 
         tv.getSortOrder().setAll( nameTC );
@@ -178,7 +185,30 @@ class PathPane extends BorderPane {
         dirTabV.getItems().setAll( PathNodeFX.createPathNodeFXList( newPath ) );
     }
 
-    private void onDragStarted() {
+    private void onDragStarted( MouseEvent mouseEvent ) {
+        LOG.info( "Start D" );
+        // selected nodes
+        List<PathNodeFX> nodes = dirTabV.getSelectionModel().getSelectedItems();
+        // filter for images
+        List<File> pathNodeL = nodes.stream()
+                .map( fxnode -> fxnode.getPathNodeProp().getValue().getValue() )
+                .filter( IOUtils::isImage )
+                .map( path -> path.toFile() )
+                .collect( Collectors.toList() );
+        // no images
+        if ( pathNodeL.isEmpty() ) {
+            return;
+        }
+
+        ClipboardContent cb = new ClipboardContent();
+
+        cb.putFiles( pathNodeL );
+
+        Dragboard db = dirTabV.startDragAndDrop( TransferMode.COPY );
+        db.setContent( cb );
+
+
+        mouseEvent.consume();
 
     }
 }

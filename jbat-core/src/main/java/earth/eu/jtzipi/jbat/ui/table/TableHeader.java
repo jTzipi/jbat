@@ -88,7 +88,6 @@ public class TableHeader extends Control {
      */
     StringProperty fxTextProp = new SimpleStringProperty( this, "FX_TEXT_PROP", "" );     // text of header
 
-
     /**
      * Text paint.
      */
@@ -142,12 +141,12 @@ public class TableHeader extends Control {
      *
      * @param text   text optional
      * @param width  width
-     * @param height
+     *
      * @return
      */
     public static TableHeader of( String text, double width, double height, boolean cachedProp ) {
         width = Utils.clamp( width, TableHeaderCover.WIDTH_MIN, TableHeaderCover.WIDTH_MAX );
-
+        height = Utils.clamp( height, TableHeaderCover.WIDTH_MIN, TableHeaderCover.HEIGHT_MAX );
 
         TableHeader theader = new TableHeader( width, height, cachedProp );
         theader.init( text );
