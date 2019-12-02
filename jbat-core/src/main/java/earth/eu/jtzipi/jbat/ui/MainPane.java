@@ -9,11 +9,12 @@ import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
 import impl.org.controlsfx.skin.BreadCrumbBarSkin;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.BreadCrumbBar;
 import org.slf4j.Logger;
@@ -76,7 +77,7 @@ public final class MainPane extends BorderPane {
         // TreeView<IPathNode> view = new TreeView<>(rootItem);
 
         dirTreeV = new TreeView<>( rootItem );
-        // dirTreeV.setOnMouseClicked( event -> pathChanged( dirTreeV.getSelectionModel().getSelectedItem() ) );
+
         dirTreeV.prefHeightProperty().bind( prefHeightProperty() );
         dirTreeV.setCellFactory( ( cb -> new PathNodeTreeCell() ) );
         dirTreeV.getSelectionModel().selectedItemProperty().addListener( ( obs, oldItem, newItem ) -> {
@@ -87,22 +88,25 @@ public final class MainPane extends BorderPane {
             }
         } );
 
-        dirTreeV.setBackground( new Background( new BackgroundFill( Painter.COLOR_GRAY_47, new CornerRadii( 5D ), Insets.EMPTY ) ) );
+
 
         Tab pathTab = new Tab( "Folder", pp );
+
         pathTab.setClosable( false );
         pathTabPane = new TabPane( pathTab );
 
         prevp = new PreviewPane();
 
+        SearchPanel sp = new SearchPanel();
         Node optionPane = createOptionBar( rootItem );
+
         BatchPathPane bpp = new BatchPathPane();
         SplitPane mainSplit = new SplitPane( pathTabPane, bpp );
         mainSplit.setOrientation( Orientation.VERTICAL );
         mainSplit.setDividerPositions( 0.79D );
         setLeft( dirTreeV );
         setCenter( mainSplit );
-        setTop( optionPane );
+        setTop( sp );
         setRight( prevp );
 
         // getChildren().add( 0, bp );

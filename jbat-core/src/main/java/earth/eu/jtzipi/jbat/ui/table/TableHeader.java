@@ -2,10 +2,7 @@ package earth.eu.jtzipi.jbat.ui.table;
 
 import earth.eu.jtzipi.jbat.Resources;
 import earth.eu.jtzipi.modules.utils.Utils;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.control.TableColumn;
@@ -97,16 +94,21 @@ public class TableHeader extends Control {
 
     ObjectProperty<Font> fxFontProp = new SimpleObjectProperty<>();
 
+    BooleanProperty fxSortProp = new SimpleBooleanProperty( this, "FX_SORT_PROP" );
+
     Sort sort = Sort.NONE;
     boolean cacheBG;
+    boolean canSort;
 
-    TableHeader( double w, double h, boolean cachedProp ) {
+    TableHeader( double w, double h, boolean cachedProp, boolean canSortProp ) {
         setWidth( w );
         setHeight( h );
         setPrefWidth( w );
         setPrefHeight( h );
         this.cacheBG = cachedProp;
 
+        this.canSort = canSortProp;
+        this.fxSortProp.setValue( canSortProp );
         this.fxSortTypeProp.setValue( sort );
 
     }
@@ -125,6 +127,10 @@ public class TableHeader extends Control {
 
     public final ObjectProperty<Sort> sortTypeProp() {
         return fxSortTypeProp;
+    }
+
+    public final BooleanProperty sortPropFX() {
+        return this.fxSortProp;
     }
 
     private void init( String textStr ) {
@@ -148,10 +154,15 @@ public class TableHeader extends Control {
         width = Utils.clamp( width, TableHeaderCover.WIDTH_MIN, TableHeaderCover.WIDTH_MAX );
         height = Utils.clamp( height, TableHeaderCover.WIDTH_MIN, TableHeaderCover.HEIGHT_MAX );
 
-        TableHeader theader = new TableHeader( width, height, cachedProp );
+        TableHeader theader = new TableHeader( width, height, cachedProp, true );
         theader.init( text );
 
         return theader;
+    }
+
+    public static TableHeader ofBackgroundOnly( double width, double height ) {
+
+        return new TableHeader( width, height, false, false );
     }
 
     private void onClick() {

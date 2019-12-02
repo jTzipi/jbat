@@ -163,7 +163,7 @@ class PathPane extends BorderPane {
         extTC.setPrefWidth( 77D );
 
         TableHeader placeHeader = TableHeader.of( "", 1000D, 46D, false );
-
+        placeHeader.setTranslateX( -3D );
         TableColumn<PathNodeFX, String> placeholder = new TableColumn<>( "placeholder" );
         placeholder.setPrefWidth( 1000 );
         placeholder.setCellFactory( callback -> new PathNodePlaceholderTableCell() );
