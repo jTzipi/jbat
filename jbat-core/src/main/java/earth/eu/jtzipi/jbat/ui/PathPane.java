@@ -15,13 +15,19 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import org.controlsfx.control.StatusBar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 
 /**
@@ -34,31 +40,35 @@ class PathPane extends BorderPane {
 
     private static final Logger LOG = LoggerFactory.getLogger( "Pathpane" );
 
-    private TableView<PathNodeFX> dirTabV;
-//    private Button startSearchB;
-//    private Button cancelSearchB;
-//    private Button chooseDirB;
-
+    private List<PathNodeFX> cacheList;     // cache of directory
+    private TableView<PathNodeFX> dirTabV;  // directory table
+    private StatusBar pathStatBar;          // status
 
     // private BooleanProperty searchRunningProp = new SimpleBooleanProperty(this, ""
 
 
-    PathPane(final IPathNode pn ) {
+    PathPane( final IPathNode pn ) {
 
 
         createPathPane( pn );
-        JBatGlobal.FX_CURRENT_DIR_PATH.addListener( ( obs, op, np )  -> onPathChanged(op, np) );
+        JBatGlobal.PATH_FILTER.getPathPredicatePropFX().addListener( ( obs, oldFilter, newFilter ) -> onFilterChanged( oldFilter, newFilter ) );
+        JBatGlobal.FX_CURRENT_DIR_PATH.addListener( ( obs, op, np ) -> onPathChanged( op, np ) );
         //
 
     }
 
+
     private void createPathPane(IPathNode node) {
 
         dirTabV = createDirTableView( node );
-        dirTabV.getSelectionModel().selectedItemProperty().addListener( (obs, oldPfx, newPfx ) -> onTablePathChanged( oldPfx, newPfx ) );
+        dirTabV.getSelectionModel().selectedItemProperty().addListener( ( obs, oldPfx, newPfx ) -> onTablePathChanged( oldPfx, newPfx ) );
         dirTabV.setOnDragDetected( evt -> onDragStarted( evt ) );
+        onPathChanged( null, node );
+
         setCenter( dirTabV );
 
+        pathStatBar = new StatusBar();
+        setBottom( pathStatBar );
     }
 
     private void onTablePathChanged( PathNodeFX oldPfx, PathNodeFX newPfx ) {
@@ -118,12 +128,13 @@ class PathPane extends BorderPane {
 
         fileHeader.setTranslateX( -3D );
 
-
+        Comparator<IPathNode> fileComp = new FileTableComparator();
         // Path name
         TableColumn<PathNodeFX, IPathNode> nameTC = new TableColumn<>( "Path" );
         nameTC.setCellValueFactory( cb-> cb.getValue().getPathNodeProp() );
         nameTC.setCellFactory( cb -> new PathNodeTableCell() );
         nameTC.setPrefWidth( 500D );
+        nameTC.setComparator( fileComp.thenComparing( IPathNode::isDir ).thenComparing( IPathNode::isReadable ).thenComparing( IPathNode::getName ) );
         nameTC.setGraphic( fileHeader );
         nameTC.sortTypeProperty().bind( fileHeader.fyTableColumnSortTypeProp() );
 
@@ -175,12 +186,22 @@ class PathPane extends BorderPane {
         return tv;
     }
 
+    private void onFilterChanged( Predicate<IPathNode> oldFilter, Predicate<IPathNode> newFilter ) {
+        // filter cached items
+        List<PathNodeFX> filterL = cacheList.stream().filter( fxp -> newFilter.test( fxp.getPathNodeProp().getValue() ) ).collect( toList() );
+        dirTabV.getItems().setAll( filterL );
+
+    }
+
     private void onPathChanged( IPathNode oldPath, IPathNode newPath ) {
 
-        if( null == newPath || newPath == oldPath ) {
+        if ( null == newPath || newPath == oldPath ) {
 
             return;
         }
+        List<PathNodeFX> pathList = PathNodeFX.createPathNodeFXList( newPath );
+        dirTabV.getItems().setAll( pathList );
+        cacheList = pathList;
 
         dirTabV.getItems().setAll( PathNodeFX.createPathNodeFXList( newPath ) );
     }
@@ -210,5 +231,27 @@ class PathPane extends BorderPane {
 
         mouseEvent.consume();
 
+    }
+
+    private void dirSummary() {
+
+        IPathNode pn = JBatGlobal.FX_CURRENT_DIR_PATH.getValue();
+        int dir = pn.getSubnodes( Files::isDirectory ).size();
+        int img = pn.getSubnodes( IOUtils::isImage ).size();
+
+    }
+
+    private static final class FileTableComparator implements Comparator<IPathNode> {
+
+        @Override
+        public int compare( IPathNode pathNode, IPathNode nodeTwo ) {
+            if ( pathNode.equals( PathNodeFX.PATH_LEVEL_UP ) ) {
+                return -1;
+            } else if ( nodeTwo.equals( PathNodeFX.PATH_LEVEL_UP ) ) {
+                return 1;
+            } else {
+                return pathNode.getValue().compareTo( nodeTwo.getValue() );
+            }
+        }
     }
 }

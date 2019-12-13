@@ -154,7 +154,7 @@ public class TableHeader extends Control {
         width = Utils.clamp( width, TableHeaderCover.WIDTH_MIN, TableHeaderCover.WIDTH_MAX );
         height = Utils.clamp( height, TableHeaderCover.WIDTH_MIN, TableHeaderCover.HEIGHT_MAX );
 
-        TableHeader theader = new TableHeader( width, height, cachedProp, true );
+        TableHeader theader = new TableHeader( width, height, cachedProp, false );
         theader.init( text );
 
         return theader;

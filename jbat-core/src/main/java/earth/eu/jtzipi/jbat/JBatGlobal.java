@@ -2,6 +2,7 @@ package earth.eu.jtzipi.jbat;
 
 import earth.eu.jtzipi.jbat.ui.IconStyle;
 import earth.eu.jtzipi.modules.io.IOUtils;
+import earth.eu.jtzipi.modules.io.image.ImageDimension;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
 import javafx.beans.binding.DoubleBinding;
@@ -12,6 +13,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.nio.file.Path;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,7 +44,7 @@ public final class JBatGlobal {
 
     public static final DoubleProperty FX_HEIGHT_PROP = new SimpleDoubleProperty(HEIGHT_DEF);
 
-    public static final  DoubleBinding FX_PREF_WIDTH_MAIN_75 = FX_HEIGHT_PROP.multiply( 0.78D );
+    public static final DoubleBinding FX_PREF_WIDTH_MAIN_75 = FX_HEIGHT_PROP.multiply( 0.78D );
 
     public static final ObjectProperty<IconStyle> FX_ICON_STYLE_PROP = new SimpleObjectProperty<>( IconStyle.BUUF );
 
@@ -50,11 +53,16 @@ public final class JBatGlobal {
      * Single main stage.
      */
     public static Stage MAIN_STAGE;
+
+    public static ImagePathFilter PATH_FILTER = new ImagePathFilter();
     /**
      * search task executor.
      */
     public static ExecutorService SEARCH_EXE_SER = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
-
+    /**
+     * Cache dimension of images.
+     */
+    public static WeakHashMap<Path, ImageDimension> IMAGE_DIM_CACHE = new WeakHashMap<>(); // cache for image dimension
 
     static {
 

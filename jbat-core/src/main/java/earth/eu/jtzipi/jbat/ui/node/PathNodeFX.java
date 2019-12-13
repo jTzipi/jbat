@@ -4,6 +4,7 @@ import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
 import javafx.beans.property.*;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.util.List;
@@ -11,22 +12,23 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * PathNode Wrapper.
+ * IPath Node Wrapper.
  * <p>This is a wrapper for {@linkplain IPathNode}</p>
- *
  */
 public class PathNodeFX {
 
-    // Level up path
-    private static final PathNodeFX PATH_LEVEL_UP = new PathNodeFX();
+    public static final Path PATH_LEVEL_UP = Paths.get( "../" );
 
-    static  {
-        PATH_LEVEL_UP.fxLengthProp.setValue( -2L );
-        PATH_LEVEL_UP.fxPathNodeProp.setValue( RegularPathNode.of( Paths.get( "../" ), null ) );
-        PATH_LEVEL_UP.fxExtProp.setValue( "" );
-        PATH_LEVEL_UP.fxTypeProp.setValue( "" );
-        PATH_LEVEL_UP.fxNameProp.setValue( "[..]" );
-        PATH_LEVEL_UP.fxCreatedFileTimeProp.setValue( FileTime.fromMillis( 0L ) );
+    // Level up path
+    private static final PathNodeFX PATH_LEVEL_UP_FX = new PathNodeFX();
+
+    static {
+        PATH_LEVEL_UP_FX.fxLengthProp.setValue( -2L );
+        PATH_LEVEL_UP_FX.fxPathNodeProp.setValue( RegularPathNode.of( Paths.get( "../" ), null ) );
+        PATH_LEVEL_UP_FX.fxExtProp.setValue( "" );
+        PATH_LEVEL_UP_FX.fxTypeProp.setValue( "" );
+        PATH_LEVEL_UP_FX.fxNameProp.setValue( "[..]" );
+        PATH_LEVEL_UP_FX.fxCreatedFileTimeProp.setValue( FileTime.fromMillis( 0L ) );
     }
 
 
@@ -65,7 +67,7 @@ public class PathNodeFX {
      */
     public static List<PathNodeFX> createPathNodeFXList( IPathNode  node ) {
         List<PathNodeFX> list = node.getSubnodes().stream().sorted().map( pnode -> PathNodeFX.of( pnode ) ).collect( Collectors.toList());
-        list.add( 0, PATH_LEVEL_UP );
+        list.add( 0, PATH_LEVEL_UP_FX );
         return list;
     }
 

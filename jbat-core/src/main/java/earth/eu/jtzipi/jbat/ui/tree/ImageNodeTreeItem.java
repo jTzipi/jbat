@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class ImageNodeTreeItem extends TreeItem<Path> {
@@ -35,12 +36,21 @@ public class ImageNodeTreeItem extends TreeItem<Path> {
         return super.getChildren();
     }
 
-    public void addIfAbesent( TreeItem<Path> item ) {
-        // item already?
-        if ( getChildren().stream().map( TreeItem::getValue ).noneMatch( path -> path.compareTo( item.getValue() ) == 0 ) ) {
-            getChildren().add( item );
+    public ImageNodeTreeItem addIfAbsent( final Path path ) {
+        Objects.requireNonNull( path );
 
+
+        ImageNodeTreeItem item;
+        Optional<TreeItem<Path>> top = getChildren().stream().filter( ti -> ti.getValue().equals( path ) ).findAny();
+        if ( !top.isPresent() ) {
+
+            item = new ImageNodeTreeItem( path );
+            getChildren().add( item );
+        } else {
+            item = ( ImageNodeTreeItem ) top.get();
         }
+
+        return item;
     }
 
 }

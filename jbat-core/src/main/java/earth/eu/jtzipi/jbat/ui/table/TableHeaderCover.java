@@ -89,12 +89,11 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
 
         TableHeader th = getSkinnable();
 
-        if ( th.canSort ) {
+
         th.setOnMouseEntered( evt -> onMouseEntered() );
         th.setOnMouseExited( evt -> onMouseExited() );
 
-            th.sortTypeProp().addListener( change -> draw() );
-        }
+        th.sortTypeProp().addListener( change -> draw() );
     }
 
     @Override
@@ -150,14 +149,12 @@ public final class TableHeaderCover extends SkinBase<TableHeader> {
         gc.setStroke( Painter.COLOR_GRAY_60 );
         // gc.strokeArc( canvasWidth - 24D, 2D, 24D, 24D, 0D, 360D, ArcType.CHORD );
 
-        if ( th.canSort ) {
-            TableHeader.Sort type = th.sortTypeProp().getValue();
+        TableHeader.Sort type = th.sortTypeProp().getValue();
 
-            gc.setStroke( type == TableHeader.Sort.ASC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
-            gc.strokePolyline( ARROW_PATH_X, upY, 3 );
-            gc.setStroke( type == TableHeader.Sort.DESC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
-            gc.strokePolyline( ARROW_PATH_X, ARROW_DOWN_PATH_Y, 3 );
-        }
+        gc.setStroke( type == TableHeader.Sort.ASC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
+        gc.strokePolyline( ARROW_PATH_X, upY, 3 );
+        gc.setStroke( type == TableHeader.Sort.DESC ? Painter.COLOR_RGB_77_77_254 : Painter.COLOR_GRAY_60 );
+        gc.strokePolyline( ARROW_PATH_X, ARROW_DOWN_PATH_Y, 3 );
 
         // getChildren().set( 0, canvas );
 

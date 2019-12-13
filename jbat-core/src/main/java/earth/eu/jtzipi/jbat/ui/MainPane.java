@@ -75,33 +75,30 @@ public final class MainPane extends BorderPane {
         TreeItem<IPathNode> rootItem = PathNodeTreeItem.of( root );
 
         // TreeView<IPathNode> view = new TreeView<>(rootItem);
-
+        rootItem.setExpanded( true );
         dirTreeV = new TreeView<>( rootItem );
-
         dirTreeV.prefHeightProperty().bind( prefHeightProperty() );
         dirTreeV.setCellFactory( ( cb -> new PathNodeTreeCell() ) );
         dirTreeV.getSelectionModel().selectedItemProperty().addListener( ( obs, oldItem, newItem ) -> {
 
-            //
+            // only if path changed and not null
             if ( null != newItem && oldItem != newItem ) {
                 pathChanged( newItem );
             }
         } );
 
-
-
         Tab pathTab = new Tab( "Folder", pp );
-
         pathTab.setClosable( false );
         pathTabPane = new TabPane( pathTab );
 
         prevp = new PreviewPane();
 
         SearchPanel sp = new SearchPanel();
-        Node optionPane = createOptionBar( rootItem );
+        // sp.prefWidthProperty().bind( this.widthProperty() );
+
 
         BatchPathPane bpp = new BatchPathPane();
-        SplitPane mainSplit = new SplitPane( pathTabPane, bpp );
+        mainSplit = new SplitPane( pathTabPane, bpp );
         mainSplit.setOrientation( Orientation.VERTICAL );
         mainSplit.setDividerPositions( 0.79D );
         setLeft( dirTreeV );
@@ -126,7 +123,7 @@ public final class MainPane extends BorderPane {
         }
         // LOG.info( "Path Tree Item bei 'pathChanged' " + nodeItem );
         // set crumb
-        pathBCB.setSelectedCrumb( nodeItem );
+        // pathBCB.setSelectedCrumb( nodeItem );
         // set changed path
         JBatGlobal.FX_CURRENT_DIR_PATH.setValue( nodeItem.getValue() );
     }
