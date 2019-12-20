@@ -4,7 +4,6 @@ import earth.eu.jtzipi.jbat.JBatGlobal;
 import earth.eu.jtzipi.jbat.ui.list.PathNodeListCellRenderer;
 import earth.eu.jtzipi.jbat.ui.task.SearchCache;
 import earth.eu.jtzipi.jbat.ui.tree.PathNodeTreeCell;
-import earth.eu.jtzipi.jbat.ui.tree.PathNodeTreeItem;
 import earth.eu.jtzipi.modules.io.IOUtils;
 import earth.eu.jtzipi.modules.node.path.IPathNode;
 import earth.eu.jtzipi.modules.node.path.RegularPathNode;
@@ -69,14 +68,11 @@ public final class MainPane extends BorderPane {
         setPrefWidth( JBatGlobal.WIDTH_DEF );
         setPrefHeight( JBatGlobal.HEIGHT_DEF );
 
-        IPathNode root = JBatGlobal.FX_CURRENT_DIR_PATH.getValue();
 
-        pp = new PathPane( root );
-        TreeItem<IPathNode> rootItem = PathNodeTreeItem.of( root );
-
+        pp = new PathPane( JBatGlobal.ROOT_NODE );
         // TreeView<IPathNode> view = new TreeView<>(rootItem);
-        rootItem.setExpanded( true );
-        dirTreeV = new TreeView<>( rootItem );
+
+        dirTreeV = new TreeView<>( JBatGlobal.ROOT_PATH_NODE );
         dirTreeV.prefHeightProperty().bind( prefHeightProperty() );
         dirTreeV.setCellFactory( ( cb -> new PathNodeTreeCell() ) );
         dirTreeV.getSelectionModel().selectedItemProperty().addListener( ( obs, oldItem, newItem ) -> {
@@ -86,6 +82,7 @@ public final class MainPane extends BorderPane {
                 pathChanged( newItem );
             }
         } );
+
 
         Tab pathTab = new Tab( "Folder", pp );
         pathTab.setClosable( false );

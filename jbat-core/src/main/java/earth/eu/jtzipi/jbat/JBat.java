@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 
 /**
  * Main class.
@@ -27,7 +29,7 @@ public class JBat extends Application {
     private static void onClose() {
 
 
-        JBatGlobal.SEARCH_EXE_SER.shutdownNow();
+        JBatGlobal.stopWatch();
         System.out.println( " <Close> " );
     }
 
@@ -47,10 +49,14 @@ public class JBat extends Application {
         primaryStage.setOnCloseRequest( event -> onClose() );
 
         JBatGlobal.MAIN_STAGE = primaryStage;
-        primaryStage.setTitle("Java Batch Tool");
-        primaryStage.setScene(scene);
+        primaryStage.setTitle( "Java Batch Tool" );
+        primaryStage.setScene( scene );
         primaryStage.show();
 
-
+        try {
+            JBatGlobal.init();
+        } catch ( final IOException ioE ) {
+            JBAT_LOG.warn( "no watch !", ioE );
+        }
     }
 }

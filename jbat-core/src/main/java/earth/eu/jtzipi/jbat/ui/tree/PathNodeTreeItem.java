@@ -30,7 +30,7 @@ public class PathNodeTreeItem extends TreeItem<IPathNode> {
     private ObjectProperty<Predicate<Path>> fxPathPredicateProp = new SimpleObjectProperty<>( this, "FX_PATH_FILTER_PROP", IOUtils.PATH_ACCEPT_ALL );
 
     PathNodeTreeItem( final IPathNode pathNode ) {
-        super(pathNode);
+        super( pathNode );
         this.created = false;
     }
 
@@ -59,7 +59,7 @@ public class PathNodeTreeItem extends TreeItem<IPathNode> {
             super.getChildren().setAll( pL
                     .stream()
                     .filter( IPathNode::isDir )
-                    .map( pn -> PathNodeTreeItem.of( pn ) )
+                    .map( PathNodeTreeItem::new )
                     .collect( Collectors.toList() ) );
 
             created = true;
@@ -68,4 +68,5 @@ public class PathNodeTreeItem extends TreeItem<IPathNode> {
 
         return super.getChildren();
     }
+
 }
